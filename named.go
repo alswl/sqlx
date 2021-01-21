@@ -378,8 +378,6 @@ func NamedGet(e Ext, dest interface{}, query string, arg interface{}) error {
 		return err
 	}
 	defer rows.Close()
-	if rows.Next() {
-		return rows.StructScan(dest)
-	}
-	return nil
+	row := &Row{rows: rows.Rows, err: err}
+	return row.scanAny(dest, false)
 }
